@@ -1,8 +1,7 @@
 import os
 import fade, art
-from colorama import Fore, init, Style
+from colorama import Fore, init, Style, Back
 import time
-import keyboard
 import msvcrt
 
 
@@ -10,6 +9,8 @@ __mainAccent = f"{Fore.LIGHTBLUE_EX}"
 __accent1 = f"{Fore.CYAN}"
 __accent2 = f"{Fore.BLUE}"
 __seperatorAccent = f"{Fore.WHITE}"
+
+windows_terminal = False
 
 def printOptions(options:dict={"Test Option Without Info":"", "With Info":"Info"}, prompt:str=f"\n{__accent2}-->{__mainAccent} Choose{__seperatorAccent}:{__accent1} "):
     optionNum = 1
@@ -51,15 +52,19 @@ def ask(text):
         return key == b'\r'
 
     print(text)
-    print(f"{__accent2}--> {Style.BRIGHT}{Fore.WHITE}>{__accent1}y{__accent2}\\{Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
+    if windows_terminal: print(f"{Style.NORMAL}{__accent2}--> {Style.BRIGHT}{Fore.WHITE}{__accent1}y̲{Back.BLACK}{__accent2}\\ {Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
+    else: print(f"{Style.NORMAL}{__accent2}--> {Style.BRIGHT}{Fore.WHITE}{__accent1}y {Back.BLACK}{__accent2}\\ {Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
     boolean = True
     while True:
         key = get_key()
         if key == b'\xe0K':
-            print(f"{Style.NORMAL}{__accent2}--> {Style.BRIGHT}{Fore.WHITE}>{__accent1}y{__accent2}\\{Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
+            if windows_terminal: print(f"{Style.NORMAL}{__accent2}--> {Style.BRIGHT}{Fore.WHITE}{__accent1}y̲{Back.BLACK}{__accent2}\\ {Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
+            else: print(f"{Style.NORMAL}{__accent2}--> {Style.BRIGHT}{Fore.WHITE}{__accent1}y {Back.BLACK}{__accent2}\\ {Style.NORMAL}{__mainAccent}n{__seperatorAccent}", end="\r")
             boolean = True
         if key == b'\xe0M':
-            print(f"{Style.NORMAL}{__accent2}--> {Fore.WHITE}{Style.NORMAL}{__mainAccent}{Style.BRIGHT}y{__accent2}\\{__accent1}n{__seperatorAccent}{Style.BRIGHT}{Fore.WHITE}<", end="\r")
+            if windows_terminal: print(f"{Style.NORMAL}{__accent2}--> {Fore.WHITE}{Style.NORMAL}{__mainAccent}{Style.BRIGHT}y {__accent2}\\ {Style.BRIGHT}{Fore.WHITE}{__accent1}n̲{__seperatorAccent}{Back.BLACK}", end="\r")
+            else: print(f"{Style.NORMAL}{__accent2}--> {Fore.WHITE}{Style.NORMAL}{__mainAccent}{Style.BRIGHT}y {__accent2}\\ {Style.BRIGHT}{Fore.WHITE}{__accent1}n{__seperatorAccent}{Back.BLACK}", end="\r")
+
             boolean = False
         if key == b'\r':
             time.sleep(0.3)
@@ -67,13 +72,13 @@ def ask(text):
 
 
 def cls(): os.system("cls" if os.name != 'posix' else quit())
-def banner(text:str="NWRHook"):
+def banner(text:str=""):
     cls()
     print(fade.water(art.text2art(text)))
-def alertG(text:str="NWRHook"):
+def alertG(text:str=""):
     cls()
     print(fade.brazil(art.text2art(text)))
-def alertR(text:str="NWRHook"):
+def alertR(text:str=""):
     cls()
     print(fade.fire(art.text2art(text)))
 def resizeTerm(X:int=120, Y:int=30):
