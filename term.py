@@ -3,12 +3,14 @@ import fade, art
 from colorama import Fore, init, Style, Back
 import time
 import msvcrt
+import ctypes
 
 
-__mainAccent = f"{Fore.LIGHTBLUE_EX}"
-__accent1 = f"{Fore.CYAN}"
-__accent2 = f"{Fore.BLUE}"
-__seperatorAccent = f"{Fore.WHITE}"
+__mainAccent = f"{Style.BRIGHT}{Fore.LIGHTBLUE_EX}"
+__accent1 = f"{Style.BRIGHT}{Fore.CYAN}"
+__accent2 = f"{Style.BRIGHT}{Fore.BLUE}"
+__seperatorAccent = f"{Style.BRIGHT}{Fore.WHITE}"
+
 
 windows_terminal = False
 
@@ -83,6 +85,19 @@ def alertR(text:str=""):
     print(fade.fire(art.text2art(text)))
 def resizeTerm(X:int=120, Y:int=30):
     os.system(f"mode con:cols={X} lines={Y}")
+
+def setOpacity(opacity):
+    opacity = int(255 * opacity//100)
+    # Get a handle to the command prompt window
+    hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+
+    # Set the window style to allow transparency
+    style = ctypes.windll.user32.GetWindowLongW(hwnd, -20)
+    style = style | 0x00080000  # WS_EX_LAYERED
+    ctypes.windll.user32.SetWindowLongW(hwnd, -20, style)
+
+    # Set the window opacity
+    ctypes.windll.user32.SetLayeredWindowAttributes(hwnd, 0, opacity, 2)
 
 init()
 
